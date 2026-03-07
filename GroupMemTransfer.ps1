@@ -1,6 +1,6 @@
 ######Migrate Users from one Security Group to Another
 
-$Dc =
+$Dc = Read-Host "Enter Domain Controller hostname"
 $Scope = "ou-x,ou=x,dc=x"
 #Asking for source group from user
 $sourceGroup = read-host  "Enter the exact name of the source group"
@@ -18,7 +18,7 @@ $targetGroup= read-host "enter target group to place the previous group members 
 Add-AdGroupMember -Server $Dc -Identity $targetGroup -Members $SourceGroupMem
 
 #print new list of target pool members.
-Get-AdGroupMember -Server $DC -Identity $SourceGroup -Members $SourceGroupMem | select name
+Get-AdGroupMember -Server $DC -Identity $targetGroup | Select-Object name
 
 #Remove list of users from source group
 Remove-AdGroupMember -Server $Dc -Identity $SourceGroup -Members $SourceGroupMem

@@ -6,17 +6,23 @@ UNIT_NAME = "601 AOG"
 ###Data Structure Creation
 conn = sqlite3.connect("fmac.db")
 c = conn.cursor()
-c.execute('''CREATE TABLE IF NOT EXISTS mission
-                COLUMN 
-                    ''' )
+c.execute('''CREATE TABLE IF NOT EXISTS mission (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                mission_statement TEXT,
+                system_to TEXT,
+                by_means TEXT,
+                in_support TEXT
+            )''')
+conn.commit()
 
 ###Welcome Human
 x = "Welcome to FMA-C for " + UNIT_NAME
 print(x)
-c.execute()
+c.execute("SELECT * FROM mission")
 Mission_List = c.fetchall()
-print(Mission_List[0])
-x = raw_input("Select Mission Thread")
+if Mission_List:
+    print(Mission_List[0])
+x = input("Select Mission Thread")
 
 
 #####Mission component relationship table
@@ -28,21 +34,21 @@ x = raw_input("Select Mission Thread")
 #1####Create Mission Statement
 
 #a system to
-sys = raw_input("Input desired System operation from operational design:")
+sys = input("Input desired System operation from operational design:")
 System_To = "A system to" + sys
 #by means of
-means = raw_input("Input how the system does what it does:")
+means = input("Input how the system does what it does:")
 By_Means = "By means of" + means
 #in support of
-sup = raw_input("Input the operation or commander it is in support of:")
+sup = input("Input the operation or commander it is in support of:")
 In_Support = "In support of " + sup
-[str]Mission_Statement = System_To + By_Means + In_Support
+Mission_Statement = System_To + " " + By_Means + " " + In_Support
 print(Mission_Statement)
 
 ####take not of other priorities
 
 #2####Unacceptable Losses
-Print("Unacceptable Losses")
+print("Unacceptable Losses")
 
 
 #3####Hazards
