@@ -20,3 +20,26 @@ Lightweight Active Directory environment management and mission analysis framewo
 ## Disclaimer
 
 For authorized use only. Ensure proper authorization before performing any Active Directory modifications.
+
+
+---
+
+## HoneyBadger Vanguard
+
+**Part of the [HoneyBadger Vanguard (HBV)](https://ihbv.io) purple team ecosystem.**
+
+Network recon and endpoint operations toolkit — nmap orchestration, system diagnostics, VM snapshot management.
+
+```powershell
+$global:Intent = 'Purple'  # Understand offense. Build better defense.
+```
+
+| | |
+|---|---|
+| **Org** | [MoSLoF on GitHub](https://github.com/MoSLoF) |
+| **Platform** | HoneyBadger Vanguard 2.0 |
+| **Demo Target** | CyberShield 2026 - Little Rock, AR |
+| **License** | See LICENSE |
+
+> The difference between a red team tool and a purple team tool is intent.
+> -- $global:Intent = 'Purple'
