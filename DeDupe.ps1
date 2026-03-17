@@ -1,55 +1,48 @@
 <#
-#<#
-#.Synopsis
-#	Short description of the purpose of this script
-#.Description
-#	Extensive description of the script
-#.Parameter X
-#    Description or parameter X
-#.Parameter Y
-#    Description or parameter Y
-#.Example
-#	First example of usage of the script
-#.Example
-#	Second example of usage of the script
-##>
-
+.Synopsis
+    Finds duplicate files in a directory by comparing MD5 hashes.
+.Description
+    Scans a directory recursively, hashes all files, and identifies
+    files with identical hashes (exact duplicates).
+.Parameter searchpath
+    Directory to scan for duplicates.
+.Example
+    .\DeDupe.ps1
 #>
-param
-(
- $searchpath,
- $scrutiny
 
+param(
+    [string]$searchpath,
+    [string]$scrutiny
 )
 
-:
 function Remove-DuplicateFiles {
+    param([string]$Path)
 
-cd $searchpath
-$files = Get-ChildItem $searchpath -Recurse  
-foreach($file in $files){
+    $files = Get-ChildItem $Path -Recurse -File
+    $hashGroups = $files | ForEach-Object {
+        [PSCustomObject]@{
+            Hash = (Get-FileHash -Path $_.FullName -Algorithm MD5).Hash
+            File = $_.FullName
+        }
+    } | Group-Object Hash | Where-Object { $_.Count -gt 1 }
 
-    
-get-filehash -Path 
+    foreach ($group in $hashGroups) {
+        Write-Host "Duplicate hash: $($group.Name)" -ForegroundColor Yellow
+        $group.Group | ForEach-Object { Write-Host "  $($_.File)" }
+    }
 
-
-
-}  
+    return $hashGroups
 }
 
-get-fileHash -path $searchpath -Algorithm MD5 
+Write-Host "Welcome to the Data Deduplication PowerShell script."
+Write-Host "This script searches the selected directory for files with the same hash."
 
-
+if (-not $searchpath) {
+    $searchpath = Read-Host "Input the full path of the directory you wish to run DeDupe"
 }
-Write-host "Welcome to Data Duplication powershell script.
-            This script will search through the selected directory for 
-            files that have the same hash, indicating that they are an exact copy of 
-            eachother.  It will the allow you to delete the files that are duplicate."
 
-$path = read-host "Input the full path of the directory you wish to run DeDupe."
-
-        
-
-Get-FileHash -path $path -algorithm MD5 
-
-
+if (Test-Path $searchpath) {
+    Remove-DuplicateFiles -Path $searchpath
+} else {
+    Write-Warning "Path not found: $searchpath"
+}

@@ -1,19 +1,21 @@
-﻿#Compares to lists and removes the items in the "exclusion list" from the Action list.
+# HOW TO MAKE A FUNCTION — example/reference script
+# Demonstrates: comparison lists, function definition, return values
 
+function Get-ExclusionList {
+    param(
+        [string]$ExclusionListPath = 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ExclusionList.txt',
+        [string]$ActionListPath    = 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ActionList.txt'
+    )
 
+    $ExclusionList = Get-Content $ExclusionListPath
+    $ActionList    = Get-Content $ActionListPath
 
+    $newlist = Compare-Object -ReferenceObject $ActionList -DifferenceObject $ExclusionList -IncludeEqual |
+               Where-Object { $_.SideIndicator -eq '==' } |
+               Select-Object -ExpandProperty InputObject
 
+    return $newlist
+}
 
-
-###function ExclusionList
-    {
-    $ExclusionList = get-content 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ExclusionList.txt'
-    $ActionList = get-content 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ActionList.txt'
-
-$newlist =    Compare-Object -ReferenceObject $ActionList -DifferenceObject $ExclusionList -IncludeEqual | where {$_.sideindicator -eq "=="}  | select {$_.inputobject}
-
-    Return $ExclusionList 
-    Return $ActionList
-    ##}
-
-    ExclusionList
+# Call the function
+Get-ExclusionList

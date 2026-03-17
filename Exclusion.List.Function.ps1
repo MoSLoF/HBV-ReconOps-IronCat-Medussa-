@@ -1,17 +1,18 @@
-﻿#Compares to lists and removes the items in the "exclusion list" from the Action list.
+# Compares two lists and removes items in the ExclusionList from the ActionList.
+# Returns only items present in both lists (intersection).
 
+function Get-ExclusionList {
+    param(
+        [string]$ExclusionListPath = 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ExclusionList.txt',
+        [string]$ActionListPath    = 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ActionList.txt'
+    )
 
+    $ExclusionList = Get-Content $ExclusionListPath
+    $ActionList    = Get-Content $ActionListPath
 
+    $newlist = Compare-Object -ReferenceObject $ActionList -DifferenceObject $ExclusionList -IncludeEqual |
+               Where-Object { $_.SideIndicator -eq '==' } |
+               Select-Object -ExpandProperty InputObject
 
-
-
-function ExclusionList
-    	{
-    		$ExclusionList = get-content 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ExclusionList.txt'
-    		$ActionList = get-content 'C:\SCRIPT WORKBENCH\Test Scripts\Test_Lists\ActionList.txt'
-
-		$newlist =    Compare-Object -ReferenceObject $ActionList -DifferenceObject $ExclusionList -IncludeEqual | where {$_.sideindicator -eq "=="}  | select {$_.inputobject
-
-	}
-
-
+    return $newlist
+}
